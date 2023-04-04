@@ -24,7 +24,7 @@ const scraperInit = async function () {
 
     const page = await browser.newPage({ ignoreHTTPSErrors: true })
 
-    await page.goto(process.env.CNA_URL, { waitUntil: 'networkidle0' })
+    await page.goto(process.env.CNA_NEWS_URL, { waitUntil: 'networkidle0' })
 
     // capture screenshot
     // await page.screenshot({ path: 'CNA_HOME.png' })
@@ -32,10 +32,17 @@ const scraperInit = async function () {
     const pageData = await page.evaluate(() => {
       const data = []
       // capture latest news title and its links
-      const items = document.querySelectorAll('article div div.layout--onecol:nth-child(2) a.list-object__heading-link')
+      // const items = document.querySelectorAll('article div div.layout--onecol:nth-child(2) a.list-object__heading-link')
 
-      items.forEach((item, index) => {
-        data.push({ [item.innerText]: item.href })
+      // capture news content
+      const content = document.querySelectorAll('section article div.content div:last-child p')
+
+      // items.forEach((item, index) => {
+      //   data.push({ [item.innerText]: item.href })
+      // })
+
+      content.forEach((item) => {
+        data.push(item.innerText)
       })
 
       return data
