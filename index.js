@@ -6,6 +6,8 @@ const puppeteer = require('puppeteer-extra')
 const StealthPlugin = require('puppeteer-extra-plugin-stealth')
 const AdblockerPlugin = require('puppeteer-extra-plugin-adblocker')
 
+const getNewsContent = require('./getNewsContent')
+
 const scraperInit = async function () {
   try {
     puppeteer.use(StealthPlugin())
@@ -32,25 +34,34 @@ const scraperInit = async function () {
     const pageData = await page.evaluate(() => {
       const data = []
       // capture latest news title and its links
-      // const items = document.querySelectorAll('article div div.layout--onecol:nth-child(2) a.list-object__heading-link')
+      const items = document.querySelectorAll('article div div.layout--onecol:nth-child(2) a.list-object__heading-link')
 
-      // capture news content
-      const content = document.querySelectorAll('section article div.content div:last-child p')
-
-      // items.forEach((item, index) => {
-      //   data.push({ [item.innerText]: item.href })
-      // })
-
-      content.forEach((item) => {
-        data.push(item.innerText)
+      items.forEach((item) => {
+        data.push({ [item.innerText]: item.href })
       })
 
       return data
     })
-    await browser.close()
 
-    console.log(pageData)
+    const resData = []
+
+    for (let i = 0; i < process.env.MAX_REQUESTS; i++) {
+      const newsTitle = Object.keys(pageData[i])
+      const newsUrl = Object.values(pageData[i])
+
+      const res = await getNewsContent(page, newsUrl[0])
+
+      resData.push({
+        title: newsTitle[0],
+        data: res.data,
+        img: res.img,
+      })
+    }
+
+    console.log(resData)
+    await browser.close()
   } catch (err) {
+    console.log(err)
     process.exit(1)
   }
 }
