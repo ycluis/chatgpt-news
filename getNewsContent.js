@@ -1,3 +1,5 @@
+const getResFromOpenAI = require('./getResFromOpenAI')
+
 const getNewsContent = async (page, url) => {
   try {
     await page.goto(url, { waitUntil: 'networkidle0' })
@@ -16,10 +18,11 @@ const getNewsContent = async (page, url) => {
       return [data, img?.src]
     })
 
-    const news = newsContent[0].join(' ').trim()
+    // const res = await getResFromOpenAI(newsContent[0].join(' ').trim())
+    const res = await getResFromOpenAI(url)
 
     return {
-      data: news,
+      data: res,
       img: newsContent[1],
     }
   } catch (err) {
