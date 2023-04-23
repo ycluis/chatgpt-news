@@ -1,38 +1,27 @@
 {
-  "name": "news-scraper-chatgpt",
+  "name": "chatgpt-news-sumaraiza",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "commit": "cz",
-    "start": "node index",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ycluis/chatgpt-news-samaraiza.git"
+  },
   "author": "Luis",
-  "license": "ISC",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ycluis/chatgpt-news-samaraiza/issues"
+  },
+  "homepage": "https://github.com/ycluis/chatgpt-news-samaraiza#readme",
   "devDependencies": {
-    "cz-conventional-changelog": "^3.3.0",
-    "eslint": "^8.37.0",
-    "eslint-config-prettier": "^8.8.0",
-    "eslint-config-standard": "^17.0.0",
-    "eslint-plugin-import": "^2.27.5",
-    "eslint-plugin-json-format": "^2.0.1",
-    "eslint-plugin-n": "^15.7.0",
-    "eslint-plugin-prettier": "^4.2.1",
-    "eslint-plugin-promise": "^6.1.1",
-    "prettier": "^2.8.7"
+    "cz-conventional-changelog": "^3.3.0"
   },
   "config": {
     "commitizen": {
       "path": "./node_modules/cz-conventional-changelog"
     }
-  },
-  "dependencies": {
-    "dotenv": "^16.0.3",
-    "openai": "^3.2.1",
-    "puppeteer": "^19.8.3",
-    "puppeteer-extra": "^3.3.6",
-    "puppeteer-extra-plugin-adblocker": "^2.13.6",
-    "puppeteer-extra-plugin-stealth": "^2.11.2"
   }
 }
