@@ -1,10 +1,10 @@
 const getResFromOpenAI = require('./getResFromOpenAI')
 
-const getNewsContent = async (page, url) => {
+const getCnaContent = async (page, url) => {
   try {
     await page.goto(url, { waitUntil: 'networkidle0' })
 
-    const newsContent = await page.evaluate(() => {
+    const [, img] = await page.evaluate(() => {
       const data = []
       const content = document.querySelectorAll('section article div.content div:last-child p')
       const img = document.querySelector('section article div.content div:nth-child(3) picture.image img')
@@ -18,12 +18,12 @@ const getNewsContent = async (page, url) => {
       return [data, img?.src]
     })
 
-    // const res = await getResFromOpenAI(newsContent[0].join(' ').trim())
+    // const res = await getResFromOpenAI(data.join(' ').trim())
     const res = await getResFromOpenAI(url)
 
     return {
-      data: res,
-      img: newsContent[1],
+      data: res.replace(': ', '').replace('- ', ''),
+      img,
     }
   } catch (err) {
     console.error(err)
@@ -32,4 +32,4 @@ const getNewsContent = async (page, url) => {
   }
 }
 
-module.exports = getNewsContent
+module.exports = getCnaContent
