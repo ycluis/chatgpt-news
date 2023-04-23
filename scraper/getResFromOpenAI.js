@@ -5,13 +5,17 @@ const configuration = new Configuration({
 })
 const openai = new OpenAIApi(configuration)
 
+const openAIParams = {
+  model: 'text-davinci-003',
+  temperature: 0.5,
+  max_tokens: 2048,
+  frequency_penalty: 0.8,
+}
+
 const getResFromOpenAI = async (content) => {
   const response = await openai.createCompletion({
-    model: 'text-davinci-003',
-    prompt: 'Summarize this news article in 30 words\n\n' + content + '',
-    temperature: 0.5,
-    max_tokens: 2048,
-    frequency_penalty: 0.8,
+    ...openAIParams,
+    prompt: content + '\n\n' + 'Tl;dr',
   })
 
   return response.data.choices[0].text.trim()
