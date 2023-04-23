@@ -45,7 +45,7 @@ const scraperInit = async function () {
 
     const resData = []
 
-    for (let i = 0; i < process.env.MAX_REQUESTS; i++) {
+    for (let i = 0; i < pageData.length; i++) {
       const newsTitle = Object.keys(pageData[i])
       const newsUrl = Object.values(pageData[i])
 
@@ -55,6 +55,7 @@ const scraperInit = async function () {
         title: newsTitle[0],
         data: res.data,
         img: res.img,
+        url: newsUrl[0],
       })
     }
 
