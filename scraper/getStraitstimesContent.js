@@ -2,7 +2,7 @@ const getResFromOpenAI = require('./getResFromOpenAI')
 
 const getStraitstimesContent = async (page, url) => {
   try {
-    await page.goto(url, { waitUntil: 'networkidle0' })
+    await page.goto(url, { waitUntil: 'networkidle0', timeout: 0 })
 
     const [, img] = await page.evaluate(() => {
       const data = []

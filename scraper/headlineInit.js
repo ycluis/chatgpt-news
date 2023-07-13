@@ -1,6 +1,9 @@
 // load env
 require('dotenv').config()
 
+const ora = require('ora')
+const spinner = ora()
+
 // load puppeteer
 const puppeteer = require('puppeteer-extra')
 const StealthPlugin = require('puppeteer-extra-plugin-stealth')
@@ -20,6 +23,8 @@ const headlineInit = async function (url) {
       '--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.45 Safari/537.36',
     ]
 
+    spinner.info('Initializing web scraping process...')
+
     const browser = await puppeteer.launch({
       ignoreHTTPSErrors: true,
       args,
@@ -28,6 +33,8 @@ const headlineInit = async function (url) {
     const page = await browser.newPage({ ignoreHTTPSErrors: true })
 
     await page.goto(url, { waitUntil: 'networkidle0', timeout: 0 })
+
+    spinner.info(`Navigating to ${url}...`)
 
     const pageData = await page.evaluate((url) => {
       const data = []
@@ -57,6 +64,8 @@ const headlineInit = async function (url) {
       return data
     }, url)
 
+    spinner.succeed(`Content successfully retrieved! Total of ${pageData.length} news articles retireved from ${url}`)
+
     const resData = []
 
     for (let i = 0; i < pageData.length; i++) {
@@ -83,10 +92,14 @@ const headlineInit = async function (url) {
         url: newsUrl[0],
         source,
       })
+
+      spinner.info(`Summarization in progress. ${i + 1}/${pageData.length}...`)
     }
 
     console.log(resData)
     await browser.close()
+
+    spinner.succeed(`Summarization for ${url} generated successfully!`)
   } catch (err) {
     console.log(err)
     process.exit(1)
