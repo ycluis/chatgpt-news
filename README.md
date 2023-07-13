@@ -39,6 +39,9 @@ The summarized news articles are displayed in a JSON format. Each article is lis
 5. Update the values in the `.env` file with your own API keys from OpenAI
 6. Start the scraper by running `npm start`
 
+## Demo
+![]()
+
 ## Disclaimer
 
 The ChatGPT News Sumaraiza is intended for personal use only and is not intended for any commercial use.

@@ -6,7 +6,7 @@
   "scripts": {
     "commit": "cz",
     "start": "node index",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "lint": "eslint --fix --ext .js,.jsx ."
   },
   "author": "Luis",
   "license": "ISC",
@@ -29,6 +29,7 @@
   "dependencies": {
     "dotenv": "^16.0.3",
     "openai": "^3.2.1",
+    "ora": "^5.4.0",
     "puppeteer": "^19.8.3",
     "puppeteer-extra": "^3.3.6",
     "puppeteer-extra-plugin-adblocker": "^2.13.6",
