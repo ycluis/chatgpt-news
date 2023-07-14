@@ -2,7 +2,10 @@
 require('dotenv').config()
 
 const ora = require('ora')
+const spinners = require('cli-spinners')
+
 const spinner = ora()
+spinner.spinner = spinners.line
 
 // load puppeteer
 const puppeteer = require('puppeteer-extra')
@@ -23,7 +26,7 @@ const headlineInit = async function (url) {
       '--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.45 Safari/537.36',
     ]
 
-    spinner.info('Initializing web scraping process...')
+    spinner.start('Initializing Puppeteer and establishing a connection to the browser...')
 
     const browser = await puppeteer.launch({
       ignoreHTTPSErrors: true,
@@ -34,7 +37,7 @@ const headlineInit = async function (url) {
 
     await page.goto(url, { waitUntil: 'networkidle0', timeout: 0 })
 
-    spinner.info(`Navigating to ${url}...`)
+    spinner.info(`Navigating to the news article URL: ${url}...`)
 
     const pageData = await page.evaluate((url) => {
       const data = []
@@ -64,7 +67,7 @@ const headlineInit = async function (url) {
       return data
     }, url)
 
-    spinner.succeed(`Content successfully retrieved! Total of ${pageData.length} news articles retireved from ${url}`)
+    spinner.succeed(`Extracting total of ${pageData.length} news articles for processing...`)
 
     const resData = []
 
@@ -73,6 +76,10 @@ const headlineInit = async function (url) {
       const newsUrl = Object.values(pageData[i])
       let res
       let source
+
+      spinner.start(
+        `Sending the news article content to the OpenAI for summarization. Progress: ${i + 1}/${pageData.length}...`,
+      )
 
       if (url.includes('channelnewsasia')) {
         res = await getCnaContent(page, newsUrl[0])
@@ -92,16 +99,15 @@ const headlineInit = async function (url) {
         url: newsUrl[0],
         source,
       })
-
-      spinner.info(`Summarization in progress. ${i + 1}/${pageData.length}...`)
     }
+
+    spinner.succeed(`Summary generated successfully.`)
 
     console.log(resData)
     await browser.close()
-
-    spinner.succeed(`Summarization for ${url} generated successfully!`)
   } catch (err) {
     console.log(err)
+    spinner.fail(err)
     process.exit(1)
   }
 }
