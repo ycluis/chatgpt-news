@@ -40,7 +40,7 @@ The summarized news articles are displayed in a JSON format. Each article is lis
 6. Start the scraper by running `npm start`
 
 ## Demo
-![](https://github.com/ycluis/chatgpt-news-samaraiza/blob/main/scraper/demo.gif)
+![](https://github.com/ycluis/chatgpt-news-samaraiza/blob/main/scraper/showcase.gif)
 
 ## Disclaimer
 
